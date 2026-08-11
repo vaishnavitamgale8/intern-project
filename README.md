@@ -30,16 +30,23 @@ ImpactBridge AI is a community-focused web platform built with Flask that connec
 <img width="1269" height="679" alt="Screenshot 2026-08-11 111502" src="https://github.com/user-attachments/assets/9de1f621-5161-4c77-8131-ecd095f21c50" />
 
 ### Become a Volunteer
-![Volunteer Page](screenshots/volunteer.png)
+<img width="1269" height="677" alt="Screenshot 2026-08-11 111451" src="https://github.com/user-attachments/assets/ecac970a-e697-4bc2-a168-61a95d2c1f98" />
+
 
 ### Admin Dashboard
 ![Admin Dashboard](screenshots/dashboard.png)
+<img width="1280" height="676" alt="Screenshot 2026-08-11 111343" src="https://github.com/user-attachments/assets/3b9696aa-c7d9-469e-be66-174df8bf4e3c" />
+
 
 ### Donations Management
 ![Donations](screenshots/donations.png)
+<img width="1280" height="678" alt="Screenshot 2026-08-11 111411 - Copy" src="https://github.com/user-attachments/assets/eef46741-395e-401d-a936-47770a97dda8" />
+
 
 ### User Login
 ![Login Page](screenshots/login.png)
+<img width="1280" height="676" alt="Screenshot 2026-08-11 111428 - Copy" src="https://github.com/user-attachments/assets/4995ae3b-56d5-4336-8096-42379c1167f8" />
+
 
 ## ⚙️ Setup & Installation
 
