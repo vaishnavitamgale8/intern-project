@@ -27,6 +27,7 @@ ImpactBridge AI is a community-focused web platform built with Flask that connec
 
 ### Projects & Campaigns
 ![Our Projects](screenshots/projects.png)
+<img width="1269" height="679" alt="Screenshot 2026-08-11 111502" src="https://github.com/user-attachments/assets/9de1f621-5161-4c77-8131-ecd095f21c50" />
 
 ### Become a Volunteer
 ![Volunteer Page](screenshots/volunteer.png)
