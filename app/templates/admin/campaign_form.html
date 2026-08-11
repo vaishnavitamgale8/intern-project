@@ -1,0 +1,48 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}{{ 'Edit' if campaign else 'New' }} Campaign{% endblock %}
+{% block page_heading %}{{ 'Edit Campaign' if campaign else 'New Campaign' }}{% endblock %}
+{% block content %}
+<div class="card" style="max-width:860px">
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="form-grid">
+                <div class="field"><label>Title *</label><input type="text" name="title" required
+                        value="{{ campaign.title if campaign else '' }}"></div>
+                <div class="field"><label>Category *</label>
+                    <select name="category" required>
+                        {% for cat in ['Education', 'Healthcare', 'Environment',
+                        'Women Empowerment', 'Child Welfare', 'Community Development'] %}
+                        <option {{ 'selected' if campaign and campaign.category==cat }}>{{ cat }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-grid">
+                <div class="field"><label>Target amount (₹) *</label><input type="number" name="target_amount"
+                        step="0.01" min="1" required value="{{ campaign.target_amount if campaign else '' }}"></div>
+                <div class="field"><label>Status</label>
+                    <select name="status">
+                        {% for s in ['ACTIVE','CLOSED','DRAFT'] %}
+                        <option {{ 'selected' if campaign and campaign.status==s }}>{{ s }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-grid">
+                <div class="field"><label>Start date *</label><input type="date" name="start_date" required
+                        value="{{ campaign.start_date if campaign else '' }}"></div>
+                <div class="field"><label>End date *</label><input type="date" name="end_date" required
+                        value="{{ campaign.end_date if campaign else '' }}"></div>
+            </div>
+            <div class="field"><label>Description *</label><textarea name="description" rows="5"
+                    required>{{ campaign.description if campaign else '' }}</textarea></div>
+            <div class="field"><label>Image</label><input type="file" name="image" accept="image/*"></div>
+            <div class="toolbar"><button class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> {{ 'Update' if
+                    campaign else 'Create' }} Campaign</button>
+                <a class="btn btn-ghost" href="{{ url_for('admin.campaigns') }}">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

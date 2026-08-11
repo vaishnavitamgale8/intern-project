@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Events · ImpactBridge AI{% endblock %}
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <p class="kicker" style="color:var(--teal-500)">EVENTS</p>
+        <h1>Upcoming Events</h1>
+        <p>Join us in person and be part of the change.</p>
+    </div>
+</section>
+<section class="section">
+    <div class="container">
+        <div class="grid-3">
+            {% for e in events %}
+            <article class="card">
+                <div class="card-body">
+                    <span
+                        class="badge badge-{{ e.status|status_badge if e.status in ['OPEN','FULL'] else 'neutral' }}">{{
+                        e.status }}</span>
+                    <h3 class="card-title mt-3">{{ e.title }}</h3>
+                    <p class="card-text">{{ e.description[:130] }}{% if e.description|length > 130 %}…{% endif %}</p>
+                    <div class="card-meta">
+                        <span><i class="fa-solid fa-calendar-day"></i>{{ e.event_date|datefmt }}{% if e.start_time %} at
+                            {{ e.start_time }}{% endif %}</span>
+                        <span><i class="fa-solid fa-location-dot"></i>{{ e.location }}</span>
+                    </div>
+                    <div class="card-meta"><span><i class="fa-solid fa-users"></i>{{ e.registered_count }}/{{ e.capacity
+                            or '∞' }} registered</span></div>
+                </div>
+                <div class="card-footer">
+                    {% if current_user.is_authenticated %}
+                    <form method="post" action="{{ url_for('public.event_register', eid=e.id) }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button class="btn btn-sm btn-primary" {% if e.is_full %}disabled{% endif %}>{% if e.is_full
+                            %}Full{% else %}Register{% endif %}</button>
+                    </form>
+                    {% else %}
+                    <a class="btn btn-sm btn-primary" href="{{ url_for('auth.login') }}">Login to register</a>
+                    {% endif %}
+                </div>
+            </article>
+            {% else %}
+            <p>No events scheduled yet. Check back soon!</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

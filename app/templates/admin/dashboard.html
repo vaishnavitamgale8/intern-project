@@ -1,0 +1,100 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block page_heading %}Dashboard{% endblock %}
+{% block content %}
+<div class="grid-4">
+    <div class="card stat-card">
+        <div class="stat-value">{{ stats.users }}</div>
+        <div class="stat-label">Users</div>
+    </div>
+    <div class="card stat-card">
+        <div class="stat-value">{{ stats.projects }}</div>
+        <div class="stat-label">Projects</div>
+    </div>
+    <div class="card stat-card">
+        <div class="stat-value">{{ stats.campaigns }}</div>
+        <div class="stat-label">Campaigns</div>
+    </div>
+    <div class="card stat-card">
+        <div class="stat-value">{{ stats.events }}</div>
+        <div class="stat-label">Events</div>
+    </div>
+    <div class="card stat-card">
+        <div class="stat-value">{{ stats.volunteers }}</div>
+        <div class="stat-label">Volunteers</div>
+    </div>
+    <div class="card stat-card">
+        <div class="stat-value">{{ stats.pending_volunteers }}</div>
+        <div class="stat-label">Pending Applications</div>
+    </div>
+    <div class="card stat-card">
+        <div class="stat-value">{{ stats.donations }}</div>
+        <div class="stat-label">Donations</div>
+    </div>
+    <div class="card stat-card">
+        <div class="stat-value">{{ stats.funds|currency }}</div>
+        <div class="stat-label">Funds Raised</div>
+    </div>
+    <div class="card stat-card">
+        <div class="stat-value">{{ stats.messages }}</div>
+        <div class="stat-label">Unread Messages</div>
+    </div>
+    <div class="card stat-card">
+        <div class="stat-value">{{ stats.audits }}</div>
+        <div class="stat-label">Audit Results</div>
+    </div>
+</div>
+<div class="split mt-4">
+    <div class="card">
+        <div class="card-body">
+            <h3>Recent Volunteer Applications</h3>
+            {% if recent_apps %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Area</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for v in recent_apps %}
+                    <tr>
+                        <td>{{ v.full_name }}</td>
+                        <td>{{ v.area_of_interest }}</td>
+                        <td><span class="badge badge-{{ v.status|status_badge }}">{{ v.status }}</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}<p>No applications yet.</p>{% endif %}
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <h3>Recent Messages</h3>
+            {% if recent_msgs %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>From</th>
+                        <th>Subject</th>
+                        <th>Read</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for m in recent_msgs %}
+                    <tr>
+                        <td>{{ m.name }}</td>
+                        <td>{{ m.subject }}</td>
+                        <td>{% if m.is_read %}<span class="badge badge-neutral">Read</span>{% else %}<span
+                                class="badge badge-warning">New</span>{% endif %}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}<p>No messages yet.</p>{% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

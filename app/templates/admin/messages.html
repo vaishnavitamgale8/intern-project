@@ -1,0 +1,51 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}Messages{% endblock %}
+{% block page_heading %}Messages{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        {% if messages %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>From</th>
+                    <th>Email</th>
+                    <th>Subject</th>
+                    <th>Received</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>{% for m in messages %}
+                <tr>
+                    <td>{{ m.name }}</td>
+                    <td>{{ m.email }}</td>
+                    <td>{{ m.subject }}</td>
+                    <td>{{ m.created_at|datefmt }}</td>
+                    <td><span class="badge {{ 'badge-neutral' if m.is_read else 'badge-warning' }}">{{ 'READ' if
+                            m.is_read else 'NEW' }}</span></td>
+                    <td>
+                        <form method="post" action="{{ url_for('admin.message_toggle', mid=m.id) }}"
+                            style="display:inline">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button class="btn btn-sm btn-primary">{{ 'Mark Unread' if m.is_read else 'Mark Read'
+                                }}</button>
+                        </form>
+                        <form method="post" action="{{ url_for('admin.message_delete', mid=m.id) }}"
+                            style="display:inline">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button class="btn btn-sm btn-error"
+                                onclick="return confirm('Delete this message?')">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6" style="background:var(--surface-2)">{{ m.message }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}<p>No messages yet.</p>{% endif %}
+    </div>
+</div>
+{% endblock %}

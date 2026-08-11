@@ -1,0 +1,33 @@
+# ── ImpactBridge AI – Requirements ─────────────────────────────────
+# Run: pip install -r requirements.txt
+
+# Web framework
+Flask==3.0.3
+Werkzeug==3.0.3
+Jinja2==3.1.4
+
+# Database
+SQLAlchemy==2.0.50
+Flask-SQLAlchemy==3.1.1
+
+# Forms & validation
+Flask-WTF==1.2.1
+WTForms==3.1.2
+email-validator==2.1.1
+
+# Authentication
+Flask-Login==0.6.3
+
+# HTTP client (for Ollama & website audit)
+requests==2.32.3
+
+# AI / parsing
+beautifulsoup4==4.12.3
+
+# Charts (client-side via CDN – no Python dep needed)
+
+# Testing
+pytest==8.2.1
+
+# Utilities
+python-dotenv==1.0.1

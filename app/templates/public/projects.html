@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Projects · ImpactBridge AI{% endblock %}
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <p class="kicker" style="color:var(--teal-500)">WHAT WE DO</p>
+        <h1>Our Projects</h1>
+        <p>Explore our social initiatives and see the change we are making together.</p>
+        {% if categories %}
+        <div class="filter-bar" style="margin-top:var(--space-4)">
+            <a class="chip chip-active" href="{{ url_for('public.projects') }}">All</a>
+            {% for cat in categories %}
+            <a class="chip" href="{{ url_for('public.projects', category=cat) }}" style="text-decoration:none">{{ cat
+                }}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</section>
+<section class="section">
+    <div class="container">
+        <div class="grid-3">
+            {% for p in projects %}
+            <article class="card card-hover">
+                <div class="card-media"><img
+                        src="{{ p.image or 'https://placehold.co/600x338/e2f1ec/0f5f4c?text=Project' }}"
+                        alt="{{ p.title }}" loading="lazy"></div>
+                <div class="card-body">
+                    <span class="badge badge-accent">{{ p.category }}</span>
+                    <h3 class="card-title mt-3"><a href="{{ url_for('public.project_detail', pid=p.id) }}">{{ p.title
+                            }}</a></h3>
+                    <p class="card-text">{{ p.description[:130] }}{% if p.description|length > 130 %}…{% endif %}</p>
+                    <div class="card-meta">
+                        <span><i class="fa-solid fa-location-dot"></i>{{ p.location }}</span>
+                        <span><i class="fa-solid fa-calendar"></i>{{ p.start_date|datefmt }}</span>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <span class="badge badge-{{ 'success' if p.status == 'ACTIVE' else 'neutral' }}">{{ p.status
+                        }}</span>
+                    <a href="{{ url_for('public.project_detail', pid=p.id) }}">Details →</a>
+                </div>
+            </article>
+            {% else %}
+            <p>No projects found{% if request.args.get('category') %} in "{{ request.args.get('category') }}"{% endif
+                %}. Check back soon!</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

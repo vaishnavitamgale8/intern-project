@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}{{ campaign.title }} · ImpactBridge AI{% endblock %}
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <p class="kicker" style="color:var(--teal-500)">CAMPAIGN</p>
+        <h1>{{ campaign.title }}</h1>
+        <p>{{ campaign.category }}</p>
+    </div>
+</section>
+<section class="section">
+    <div class="container">
+        <div class="split">
+            <div class="split-main card">
+                {% if campaign.image %}
+                <img src="{{ campaign.image }}" alt="{{ campaign.title }}" class="card-img-top"
+                    style="width:100%;border-radius:var(--radius-lg) var(--radius-lg) 0 0">
+                {% endif %}
+                <div class="card-body">
+                    <h2>About this campaign</h2>
+                    <p>{{ campaign.description }}</p>
+                </div>
+            </div>
+            <aside class="split-side">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="progress">
+                            <div class="progress-bar" style="width:{{ campaign.percent_raised }}%"></div>
+                        </div>
+                        <h3 style="margin-top:var(--space-3)">{{ campaign.amount_raised|currency }} raised</h3>
+                        <p class="lead">{{ campaign.percent_raised }}% of {{ campaign.target_amount|currency }} goal</p>
+                        <ul class="list-plain" style="margin:var(--space-3) 0">
+                            <li><strong>Started:</strong> {{ campaign.start_date|datefmt }}</li>
+                            <li><strong>Ends:</strong> {{ campaign.end_date|datefmt }}</li>
+                            <li><strong>Status:</strong> {{ campaign.status }}</li>
+                        </ul>
+                        <a class="btn btn-lg btn-primary" style="width:100%"
+                            href="{{ url_for('public.donate', cid=campaign.id) }}"><i
+                                class="fa-solid fa-hand-holding-dollar"></i> Donate Now</a>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+</section>
+{% endblock %}

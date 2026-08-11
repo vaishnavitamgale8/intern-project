@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Gallery · ImpactBridge AI{% endblock %}
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <p class="kicker" style="color:var(--teal-500)">GALLERY</p>
+        <h1>Moments That Matter</h1>
+        <p>Stories from the ground — captured.</p>
+    </div>
+</section>
+<section class="section">
+    <div class="container">
+        <div class="gallery-grid">
+            {% for item in items %}
+            <figure class="gallery-item card">
+                <img src="{{ item.image }}" alt="{{ item.caption or 'Gallery image' }}" loading="lazy">
+                {% if item.caption %}<figcaption>{{ item.caption }}</figcaption>{% endif %}
+            </figure>
+            {% else %}
+            <p>Gallery photos coming soon!</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

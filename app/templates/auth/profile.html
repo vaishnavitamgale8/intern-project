@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}My Profile · ImpactBridge AI{% endblock %}
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <p class="kicker" style="color:var(--teal-500)">MY ACCOUNT</p>
+        <h1>Hello, {{ current_user.full_name }}</h1>
+    </div>
+</section>
+<section class="section">
+    <div class="container">
+        <div class="grid-3">
+            <div class="card">
+                <div class="card-body">
+                    <h3>Account Details</h3>
+                    <ul class="list-plain">
+                        <li><strong>Email:</strong> {{ current_user.email }}</li>
+                        <li><strong>Phone:</strong> {{ current_user.phone or '—' }}</li>
+                        <li><strong>City:</strong> {{ current_user.city or '—' }}</li>
+                        <li><strong>Joined:</strong> {{ current_user.created_at|datefmt }}</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h3>Volunteer Application</h3>
+                    {% if application %}
+                    <span class="badge badge-{{ application.status|status_badge }}">{{ application.status }}</span>
+                    <ul class="list-plain">
+                        <li><strong>Area:</strong> {{ application.area_of_interest }}</li>
+                        <li><strong>Skills:</strong> {{ application.skills }}</li>
+                        <li><strong>Availability:</strong> {{ application.availability }}</li>
+                    </ul>
+                    {% else %}
+                    <p>You haven't applied to volunteer yet.</p>
+                    <a class="btn btn-sm btn-primary" href="{{ url_for('public.volunteer_apply') }}">Apply Now</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h3>Quick Actions</h3>
+                    <ul class="list-plain">
+                        <li><a href="{{ url_for('volunteer.dashboard') }}"><i class="fa-solid fa-gauge-high"></i>
+                                Volunteer Dashboard</a></li>
+                        <li><a href="{{ url_for('volunteer.my_events') }}"><i class="fa-solid fa-calendar"></i> My
+                                Events</a></li>
+                        <li><a href="{{ url_for('volunteer.my_donations') }}"><i
+                                    class="fa-solid fa-hand-holding-dollar"></i> My Donations</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="card" style="margin-top:var(--space-4)">
+            <div class="card-body">
+                <h3>My Events ({{ regs|length }})</h3>
+                {% if regs %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Event</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for r in regs %}
+                        <tr>
+                            <td>{{ r.event.title }}</td>
+                            <td>{{ r.event.event_date|datefmt }}</td>
+                            <td><span class="badge badge-success">REGISTERED</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p>No event registrations yet.</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="card" style="margin-top:var(--space-4)">
+            <div class="card-body">
+                <h3>My Donations ({{ donations|length }})</h3>
+                {% if donations %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Campaign</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for d in donations %}
+                        <tr>
+                            <td>{{ d.campaign.title if d.campaign else 'General' }}</td>
+                            <td>{{ d.amount|currency }}</td>
+                            <td>{{ d.created_at|datefmt }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p>No donations yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

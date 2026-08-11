@@ -1,0 +1,62 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}Impact Metrics{% endblock %}
+{% block page_heading %}Impact Metrics{% endblock %}
+{% block content %}
+<div class="card" style="max-width:760px">
+    <div class="card-body">
+        <form method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="form-grid">
+                <div class="field"><label>Title *</label><input type="text" name="title" required
+                        value="{{ metric.title if metric else '' }}"></div>
+                <div class="field"><label>Value *</label><input type="text" name="value" required
+                        value="{{ metric.value if metric else '' }}"></div>
+            </div>
+            <div class="form-grid">
+                <div class="field"><label>Unit</label><input type="text" name="unit"
+                        value="{{ metric.unit if metric else '' }}" placeholder="e.g. children, trees, ₹"></div>
+                <div class="field"><label>Sort Order</label><input type="number" name="sort_order"
+                        value="{{ metric.sort_order if metric else 0 }}"></div>
+            </div>
+            <div class="toolbar"><button class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save
+                    Metric</button>
+                <a class="btn btn-ghost" href="{{ url_for('admin.impact') }}">Reset</a>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="card" style="margin-top:var(--space-4)">
+    <div class="card-body">
+        {% if metrics %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Value</th>
+                    <th>Unit</th>
+                    <th>Order</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>{% for m in metrics %}
+                <tr>
+                    <td>{{ m.title }}</td>
+                    <td>{{ m.value }}</td>
+                    <td>{{ m.unit }}</td>
+                    <td>{{ m.sort_order }}</td>
+                    <td>
+                        <form method="post" action="{{ url_for('admin.impact_delete', mid=m.id) }}"
+                            style="display:inline">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button class="btn btn-sm btn-error"
+                                onclick="return confirm('Delete this metric?')">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}<p>No metrics yet.</p>{% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+{% block title %}ImpactBridge AI – Volunteer, Donate, Make an Impact{% endblock %}
+{% block content %}
+
+<section class="hero">
+    <div class="container">
+        <p class="kicker" style="color:var(--teal-500);letter-spacing:.2em">BRIDGING COMMITMENT & COMMUNITY</p>
+        <h1>Turn compassion into measurable impact.</h1>
+        <p>ImpactBridge AI connects volunteers, donors and social-impact projects. Explore initiatives, fund campaigns
+            and track real outcomes — all in one platform.</p>
+        <div class="hero-actions">
+            <a class="btn btn-lg btn-primary" href="{{ url_for('public.projects') }}"><i
+                    class="fa-solid fa-diagram-project"></i> Explore Projects</a>
+            <a class="btn btn-lg btn-outline" href="{{ url_for('public.volunteer_apply') }}"><i
+                    class="fa-solid fa-handshake"></i> Become a Volunteer</a>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <p class="kicker">Our Impact Numbers</p>
+        <h2 style="margin-bottom:var(--space-5)">Together we are moving the needle</h2>
+        <div class="grid-4">
+            <div class="card stat-card">
+                <div class="stat-icon"><i class="fa-solid fa-diagram-project"></i></div>
+                <div class="stat-value">{{ stats.projects }}+</div>
+                <div class="stat-label">Projects Launched</div>
+            </div>
+            <div class="card stat-card">
+                <div class="stat-icon"><i class="fa-solid fa-handshake"></i></div>
+                <div class="stat-value">{{ stats.volunteers }}+</div>
+                <div class="stat-label">Active Volunteers</div>
+            </div>
+            <div class="card stat-card">
+                <div class="stat-icon"><i class="fa-solid fa-people-roof"></i></div>
+                <div class="stat-value">{{ stats.beneficiaries }}+</div>
+                <div class="stat-label">Beneficiaries Reached</div>
+            </div>
+            <div class="card stat-card">
+                <div class="stat-icon"><i class="fa-solid fa-bullhorn"></i></div>
+                <div class="stat-value">{{ stats.campaigns }}</div>
+                <div class="stat-label">Live Campaigns</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section section-tinted">
+    <div class="container">
+        <div
+            style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--space-3);margin-bottom:var(--space-5)">
+            <div>
+                <p class="kicker">Featured Projects</p>
+                <h2>Latest social initiatives</h2>
+            </div>
+            <a class="btn btn-outline" href="{{ url_for('public.projects') }}">View all projects <i
+                    class="fa-solid fa-arrow-right"></i></a>
+        </div>
+        <div class="grid-3">
+            {% for p in projects %}
+            <article class="card card-hover">
+                <div class="card-media"><img
+                        src="{{ p.image or 'https://placehold.co/600x338/e2f1ec/0f5f4c?text=Project' }}"
+                        alt="{{ p.title }}" loading="lazy"></div>
+                <div class="card-body">
+                    <span class="badge badge-accent">{{ p.category }}</span>
+                    <h3 class="card-title mt-3"><a href="{{ url_for('public.project_detail', pid=p.id) }}">{{ p.title
+                            }}</a></h3>
+                    <p class="card-text">{{ p.description[:120] }}{% if p.description|length > 120 %}…{% endif %}</p>
+                    <div class="card-meta"><span><i class="fa-solid fa-location-dot"></i>{{ p.location }}</span><span><i
+                                class="fa-solid fa-users"></i>{{ p.beneficiaries }} beneficiaries</span></div>
+                </div>
+                <div class="card-footer"><span
+                        class="badge badge-{{ 'success' if p.status == 'ACTIVE' else 'neutral' }}">{{ p.status
+                        }}</span><a href="{{ url_for('public.project_detail', pid=p.id) }}">Learn more →</a></div>
+            </article>
+            {% else %}
+            <p>No projects yet. Check back soon!</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div
+            style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--space-3);margin-bottom:var(--space-5)">
+            <div>
+                <p class="kicker">Crowdfunding</p>
+                <h2>Active campaigns</h2>
+            </div>
+            <a class="btn btn-outline" href="{{ url_for('public.campaigns') }}">View all campaigns <i
+                    class="fa-solid fa-arrow-right"></i></a>
+        </div>
+        <div class="grid-3">
+            {% for c in campaigns %}
+            <article class="card card-hover">
+                <div class="card-media"><img
+                        src="{{ c.image or 'https://placehold.co/600x338/fdf1dd/e8a33d?text=Campaign' }}"
+                        alt="{{ c.title }}" loading="lazy"></div>
+                <div class="card-body">
+                    <h3 class="card-title"><a href="{{ url_for('public.campaign_detail', cid=c.id) }}">{{ c.title }}</a>
+                    </h3>
+                    <p class="card-text">{{ c.description[:120] }}{% if c.description|length > 120 %}…{% endif %}</p>
+                    <div class="progress mt-4">
+                        <div class="progress-bar" style="width:{{ c.percent_raised }}%"></div>
+                    </div>
+                    <div class="card-meta"><span>{{ c.amount_raised|currency }} raised</span><span>{{
+                            c.percent_raised }}% of {{ c.target_amount|currency }}</span></div>
+                </div>
+                <div class="card-footer"><a class="btn btn-sm btn-primary"
+                        href="{{ url_for('public.donate', cid=c.id) }}"><i class="fa-solid fa-hand-holding-dollar"></i>
+                        Donate</a><span class="badge badge-success">LIVE</span></div>
+            </article>
+            {% else %}
+            <p>No active campaigns right now.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="section section-tinted">
+    <div class="container">
+        <div
+            style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--space-3);margin-bottom:var(--space-5)">
+            <div>
+                <p class="kicker">Upcoming Events</p>
+                <h2>Get involved in person</h2>
+            </div>
+            <a class="btn btn-outline" href="{{ url_for('public.events') }}">View calendar <i
+                    class="fa-solid fa-arrow-right"></i></a>
+        </div>
+        <div class="grid-3">
+            {% for e in events %}
+            <article class="card">
+                <div class="card-body">
+                    <span class="badge badge-{{ 'success' if e.status == 'OPEN' else 'warning' }}">{{ e.status }}</span>
+                    <h3 class="card-title mt-3">{{ e.title }}</h3>
+                    <p class="card-text">{{ e.description[:100] }}{% if e.description|length > 100 %}…{% endif %}</p>
+                    <div class="card-meta"><span><i class="fa-solid fa-calendar-day"></i>{{ e.event_date|datefmt
+                            }}</span><span><i class="fa-solid fa-location-dot"></i>{{ e.location }}</span>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    {% if current_user.is_authenticated %}
+                    <form method="post" action="{{ url_for('public.event_register', eid=e.id) }}"><button
+                            class="btn btn-sm btn-primary">Register</button></form>
+                    {% else %}
+                    <a class="btn btn-sm btn-primary" href="{{ url_for('auth.login') }}">Login to register</a>
+                    {% endif %}
+                    <span>{{ e.registered_count }}/{{ e.capacity or '∞' }} seats</span>
+                </div>
+            </article>
+            {% else %}
+            <p>No upcoming events.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container" style="text-align:center">
+        <p class="kicker">Meet the Assistant</p>
+        <h2>Have a question? Ask ImpactBot.</h2>
+        <p class="lead" style="margin:var(--space-3) auto var(--space-5)">ImpactBot is a local AI assistant powered by
+            Ollama. It answers questions about volunteering, projects, donations and events — with a knowledge base
+            fallback when offline.</p>
+        <button class="btn btn-lg btn-primary" onclick="document.getElementById('chat-fab').click()"><i
+                class="fa-solid fa-robot"></i> Chat with ImpactBot</button>
+    </div>
+</section>
+
+{% endblock %}

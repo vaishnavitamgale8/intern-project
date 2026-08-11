@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Campaigns · ImpactBridge AI{% endblock %}
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <p class="kicker" style="color:var(--teal-500)">CROWDFUNDING</p>
+        <h1>Active Campaigns</h1>
+        <p>Support a cause you care about. Every rupee creates impact.</p>
+    </div>
+</section>
+<section class="section">
+    <div class="container">
+        <div class="grid-3">
+            {% for c in campaigns %}
+            <article class="card card-hover">
+                <div class="card-media"><img
+                        src="{{ c.image or 'https://placehold.co/600x338/fdf1dd/e8a33d?text=Campaign' }}"
+                        alt="{{ c.title }}" loading="lazy"></div>
+                <div class="card-body">
+                    <span class="badge badge-accent">{{ c.category }}</span>
+                    <h3 class="card-title mt-3"><a href="{{ url_for('public.campaign_detail', cid=c.id) }}">{{ c.title
+                            }}</a></h3>
+                    <p class="card-text">{{ c.description[:130] }}{% if c.description|length > 130 %}…{% endif %}</p>
+                    <div class="progress mt-4">
+                        <div class="progress-bar" style="width:{{ c.percent_raised }}%"></div>
+                    </div>
+                    <div class="card-meta"><span>{{ c.amount_raised|currency }} raised</span><span>{{ c.percent_raised
+                            }}% of {{ c.target_amount|currency }}</span></div>
+                    <div class="card-meta"><span><i class="fa-solid fa-calendar"></i> Ends {{ c.end_date|datefmt
+                            }}</span></div>
+                </div>
+                <div class="card-footer"><a class="btn btn-sm btn-primary"
+                        href="{{ url_for('public.donate', cid=c.id) }}"><i class="fa-solid fa-hand-holding-dollar"></i>
+                        Donate</a><span class="badge badge-success">LIVE</span></div>
+            </article>
+            {% else %}
+            <p>No active campaigns right now.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

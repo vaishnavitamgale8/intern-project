@@ -1,0 +1,35 @@
+<aside class="admin-sidebar" id="admin-sidebar">
+    <a class="brand" href="{{ url_for('public.home') }}"><span class="brand-logo"><i
+                class="fa-solid fa-hand-holding-heart"></i></span>ImpactBridge AI</a>
+    <nav class="sidebar-nav">
+        <div class="nav-section">Overview</div>
+        <a href="{{ url_for('admin.dashboard') }}" class="{{ 'active' if request.endpoint == 'admin.dashboard' }}"><i
+                class="fa-solid fa-gauge-high"></i> Dashboard</a>
+        <a href="{{ url_for('admin.audits') }}" class="{{ 'active' if request.endpoint == 'admin.audits' }}"><i
+                class="fa-solid fa-magnifying-glass"></i> Audits</a>
+        <div class="nav-section">Content</div>
+        <a href="{{ url_for('admin.projects') }}"
+            class="{{ 'active' if request.endpoint in ('admin.projects','admin.project_new','admin.project_edit') }}"><i
+                class="fa-solid fa-diagram-project"></i> Projects</a>
+        <a href="{{ url_for('admin.campaigns') }}"
+            class="{{ 'active' if request.endpoint in ('admin.campaigns','admin.campaign_new','admin.campaign_edit') }}"><i
+                class="fa-solid fa-bullhorn"></i> Campaigns</a>
+        <a href="{{ url_for('admin.events') }}"
+            class="{{ 'active' if request.endpoint in ('admin.events','admin.event_new','admin.event_edit') }}"><i
+                class="fa-solid fa-calendar-days"></i> Events</a>
+        <a href="{{ url_for('admin.gallery') }}" class="{{ 'active' if request.endpoint == 'admin.gallery' }}"><i
+                class="fa-solid fa-image"></i> Gallery</a>
+        <a href="{{ url_for('admin.impact') }}" class="{{ 'active' if request.endpoint == 'admin.impact' }}"><i
+                class="fa-solid fa-chart-line"></i> Impact</a>
+        <div class="nav-section">People</div>
+        <a href="{{ url_for('admin.volunteers') }}" class="{{ 'active' if request.endpoint == 'admin.volunteers' }}"><i
+                class="fa-solid fa-handshake"></i> Volunteers</a>
+        <a href="{{ url_for('admin.donations') }}" class="{{ 'active' if request.endpoint == 'admin.donations' }}"><i
+                class="fa-solid fa-hand-holding-dollar"></i> Donations</a>
+        <a href="{{ url_for('admin.users') }}" class="{{ 'active' if request.endpoint == 'admin.users' }}"><i
+                class="fa-solid fa-users"></i> Users</a>
+        <a href="{{ url_for('admin.messages') }}" class="{{ 'active' if request.endpoint == 'admin.messages' }}"><i
+                class="fa-solid fa-envelope"></i> Messages</a>
+    </nav>
+</aside>
+<div class="sidebar-backdrop" id="admin-backdrop"></div>

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Volunteer Dashboard · ImpactBridge AI{% endblock %}
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <p class="kicker" style="color:var(--teal-500)">VOLUNTEER</p>
+        <h1>Volunteer Dashboard</h1>
+        <p>Welcome back{% if profile %}, {{ profile.full_name }}{% endif %}!</p>
+    </div>
+</section>
+<section class="section">
+    <div class="container">
+        <div class="grid-4">
+            <div class="card stat-card">
+                <div class="stat-value">{{ regs|length }}</div>
+                <div class="stat-label">Event Registrations</div>
+            </div>
+            <div class="card stat-card">
+                <div class="stat-value">{{ donations|length }}</div>
+                <div class="stat-label">Donations</div>
+            </div>
+            <div class="card stat-card">
+                <div class="stat-value">{{ total_donated|currency }}</div>
+                <div class="stat-label">Total Donated</div>
+            </div>
+            <div class="card stat-card">
+                <div class="stat-value">{{ upcomings|length }}</div>
+                <div class="stat-label">Upcoming Events</div>
+            </div>
+        </div>
+        {% if profile %}
+        <div class="card" style="margin-top:var(--space-4)">
+            <div class="card-body">
+                <h3>Application Status</h3>
+                <span class="badge badge-{{ profile.status|status_badge }}">{{ profile.status }}</span>
+                <p style="margin-top:var(--space-2)"><strong>Area:</strong> {{ profile.area_of_interest }} ·
+                    <strong>Skills:</strong> {{ profile.skills }}</p>
+            </div>
+        </div>
+        {% endif %}
+        <div class="card" style="margin-top:var(--space-4)">
+            <div class="card-body">
+                <h3>Upcoming Events</h3>
+                {% if upcomings %}
+                <ul class="list-plain">
+                    {% for r in upcomings %}
+                    <li><a href="{{ url_for('public.events') }}">{{ r.event.title }}</a> — {{ r.event.event_date|datefmt
+                        }} · {{ r.event.location }}</li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p>No upcoming events. <a href="{{ url_for('public.events') }}">Browse events</a></p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

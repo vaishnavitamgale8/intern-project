@@ -1,0 +1,40 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}{{ 'Edit' if event else 'New' }} Event{% endblock %}
+{% block page_heading %}{{ 'Edit Event' if event else 'New Event' }}{% endblock %}
+{% block content %}
+<div class="card" style="max-width:760px">
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="field"><label>Title *</label><input type="text" name="title" required
+                    value="{{ event.title if event else '' }}"></div>
+            <div class="form-grid">
+                <div class="field"><label>Date *</label><input type="date" name="event_date" required
+                        value="{{ event.event_date if event else '' }}"></div>
+                <div class="field"><label>Start time</label><input type="time" name="start_time"
+                        value="{{ event.start_time if event else '' }}"></div>
+            </div>
+            <div class="field"><label>Location *</label><input type="text" name="location" required
+                    value="{{ event.location if event else '' }}"></div>
+            <div class="form-grid">
+                <div class="field"><label>Capacity *</label><input type="number" name="capacity" min="1" required
+                        value="{{ event.capacity if event else '' }}"></div>
+                <div class="field"><label>Status</label>
+                    <select name="status">
+                        {% for s in ['OPEN','CLOSED','FULL'] %}
+                        <option {{ 'selected' if event and event.status==s }}>{{ s }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="field"><label>Description *</label><textarea name="description" rows="5"
+                    required>{{ event.description if event else '' }}</textarea></div>
+            <div class="field"><label>Image</label><input type="file" name="image" accept="image/*"></div>
+            <div class="toolbar"><button class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> {{ 'Update' if
+                    event else 'Create' }} Event</button>
+                <a class="btn btn-ghost" href="{{ url_for('admin.events') }}">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

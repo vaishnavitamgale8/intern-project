@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Impact · ImpactBridge AI{% endblock %}
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <p class="kicker" style="color:var(--teal-500)">OUR IMPACT</p>
+        <h1>Impact Dashboard</h1>
+        <p>Transparent, measurable social change.</p>
+    </div>
+</section>
+<section class="section">
+    <div class="container">
+        <div class="grid-4">
+            <div class="card stat-card">
+                <div class="stat-value">{{ stats.projects }}+</div>
+                <div class="stat-label">Projects</div>
+            </div>
+            <div class="card stat-card">
+                <div class="stat-value">{{ stats.volunteers }}+</div>
+                <div class="stat-label">Volunteers</div>
+            </div>
+            <div class="card stat-card">
+                <div class="stat-value">₹{{ "{:,.0f}".format(stats.funds) }}</div>
+                <div class="stat-label">Funds Raised</div>
+            </div>
+            <div class="card stat-card">
+                <div class="stat-value">{{ stats.beneficiaries }}+</div>
+                <div class="stat-label">Beneficiaries</div>
+            </div>
+        </div>
+        {% if metrics %}
+        <h2 style="margin-top:var(--space-6)">Growth Over Time</h2>
+        <div class="card" style="padding:var(--space-4)">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Period</th>
+                        <th>Projects</th>
+                        <th>Volunteers</th>
+                        <th>Beneficiaries</th>
+                        <th>Funds Raised</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for m in metrics %}
+                    <tr>
+                        <td>{{ m.period_label }}</td>
+                        <td>{{ m.projects }}</td>
+                        <td>{{ m.volunteers }}</td>
+                        <td>{{ m.beneficiaries }}</td>
+                        <td>{{ m.funds_raised|currency }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+        {% if camp_perf %}
+        <h2 style="margin-top:var(--space-6)">Campaign Performance</h2>
+        <div class="card" style="padding:var(--space-4)">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Campaign</th>
+                        <th>Raised</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for title, raised in camp_perf %}
+                    <tr>
+                        <td>{{ title }}</td>
+                        <td>{{ raised|currency }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

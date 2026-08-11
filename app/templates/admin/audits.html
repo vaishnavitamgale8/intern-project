@@ -1,0 +1,66 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}Audit Results{% endblock %}
+{% block page_heading %}Audit Results{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <div class="toolbar">
+            <form method="post" action="{{ url_for('admin.audits') }}" style="display:inline">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button class="btn btn-sm btn-primary"><i class="fa-solid fa-rocket"></i> Run Full Audit</button>
+            </form>
+        </div>
+        {% if results %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>URL</th>
+                    <th>Overall</th>
+                    <th>Grade</th>
+                    <th>SEO</th>
+                    <th>Accessibility</th>
+                    <th>Links</th>
+                    <th>Security</th>
+                    <th>Performance</th>
+                    <th>Content</th>
+                    <th>Issues</th>
+                </tr>
+            </thead>
+            <tbody>{% for r in results %}
+                <tr>
+                    <td>{{ r.created_at|datefmt }}</td>
+                    <td>{{ r.url }}</td>
+                    <td><strong>{{ r.overall_score }}/100</strong></td>
+                    <td><span
+                            class="badge badge-{{ 'success' if r.overall_score >= 80 else ('warning' if r.overall_score >= 60 else 'error') }}">{{
+                            r.grade }}</span></td>
+                    <td>{{ r.seo_score }}</td>
+                    <td>{{ r.accessibility_score }}</td>
+                    <td>{{ r.links_score }}</td>
+                    <td>{{ r.security_score }}</td>
+                    <td>{{ r.performance_score }}</td>
+                    <td>{{ r.content_score }}</td>
+                    <td>
+                        {% for issue in r.issues %}
+                        <span
+                            class="badge badge-{{ 'error' if issue.severity == 'CRITICAL' else ('warning' if issue.severity == 'HIGH' else 'neutral') }}">{{
+                            issue.category }}: {{ issue.title }}</span>
+                        {% else %}
+                        <span class="badge badge-success">No issues</span>
+                        {% endfor %}
+                    </td>
+                </tr>
+                {% if r.ai_summary %}
+                <tr>
+                    <td colspan="11" style="background:var(--surface-2)"><strong>AI summary:</strong> {{ r.ai_summary }}
+                    </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}<p>No audit results yet. Run your first audit to verify site integrity.</p>{% endif %}
+    </div>
+</div>
+{% endblock %}

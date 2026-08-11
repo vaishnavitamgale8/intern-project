@@ -1,0 +1,88 @@
+<button class="chat-fab" id="chat-fab" aria-label="Open ImpactBot chat"><i class="fa-solid fa-robot"></i></button>
+
+<div class="chat-panel" id="chat-panel">
+    <div class="chat-header">
+        <span class="avatar"><i class="fa-solid fa-robot"></i></span>
+        <div>
+            <h3>ImpactBot <span id="ai-status" class="ai-status"><span class="status-dot offline"></span><span
+                        id="ai-status-text">checking…</span></span></h3>
+            <p>Powered by ImpactBridge AI <span id="ai-source"></span></p>
+        </div>
+        <button class="modal-close" id="chat-close" aria-label="Close chat" style="color:var(--white)">&times;</button>
+    </div>
+    <div class="chat-quick">
+        <button class="chip" data-q="How do I volunteer?">Volunteer</button>
+        <button class="chip" data-q="How can I donate?">Donate</button>
+        <button class="chip" data-q="What events are coming up?">Events</button>
+    </div>
+    <div class="chat-messages" id="chat-messages">
+        <div class="msg msg-bot">Hello! 👋 I'm ImpactBot. Ask me about volunteering, projects, campaigns, donations or
+            events.</div>
+    </div>
+    <div class="chat-input">
+        <input type="text" id="chat-input" placeholder="Ask me anything…" aria-label="Chat message">
+        <button id="chat-send" aria-label="Send"><i class="fa-solid fa-paper-plane"></i></button>
+    </div>
+</div>
+
+<script>
+    (function () {
+        const fab = document.getElementById('chat-fab');
+        const panel = document.getElementById('chat-panel');
+        const close = document.getElementById('chat-close');
+        const messages = document.getElementById('chat-messages');
+        const input = document.getElementById('chat-input');
+        const send = document.getElementById('chat-send');
+        const statusText = document.getElementById('ai-status-text');
+        const statusDot = document.querySelector('#ai-status .status-dot');
+        const source = document.getElementById('ai-source');
+
+        function toggle(open) { panel.classList.toggle('open', open); }
+        fab.addEventListener('click', () => toggle(!panel.classList.contains('open')));
+        close.addEventListener('click', () => toggle(false));
+
+        function addMsg(text, who) {
+            const div = document.createElement('div');
+            div.className = 'msg ' + (who === 'user' ? 'msg-user' : 'msg-bot');
+            div.textContent = text;
+            messages.appendChild(div);
+            messages.scrollTop = messages.scrollHeight;
+            return div;
+        }
+
+        async function ask(text) {
+            addMsg(text, 'user');
+            input.value = '';
+            const typing = addMsg('', 'bot');
+            typing.innerHTML = '<span class="typing-dots"><span></span><span></span><span></span></span>';
+            try {
+                const res = await fetch('{{ url_for("ai.chat") }}', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: text })
+                });
+                const data = await res.json();
+                typing.remove();
+                addMsg(data.answer, 'bot');
+                source.textContent = data.source === 'ollama' ? '· live Ollama' : '· knowledge base';
+            } catch (e) {
+                typing.remove();
+                addMsg('Sorry, I could not reach the assistant. Try again in a moment.', 'bot');
+            }
+        }
+
+        send.addEventListener('click', () => { if (input.value.trim()) ask(input.value.trim()); });
+        input.addEventListener('keydown', (e) => { if (e.key === 'Enter' && input.value.trim()) ask(input.value.trim()); });
+        document.querySelectorAll('.chip').forEach(chip => chip.addEventListener('click', () => ask(chip.dataset.q)));
+
+        fetch('{{ url_for("ai.status") }}').then(r => r.json()).then(data => {
+            if (data.online) {
+                statusText.textContent = 'online · ' + data.model;
+                statusDot.classList.remove('offline'); statusDot.classList.add('online');
+            } else {
+                statusText.textContent = 'knowledge base';
+                statusDot.classList.remove('offline'); statusDot.classList.add('online');
+            }
+        }).catch(() => { statusText.textContent = 'offline'; });
+    })();
+</script>

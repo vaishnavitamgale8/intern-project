@@ -1,0 +1,54 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}{{ 'Edit' if project else 'New' }} Project{% endblock %}
+{% block page_heading %}{{ 'Edit Project' if project else 'New Project' }}{% endblock %}
+{% block content %}
+<div class="card" style="max-width:860px">
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="form-grid">
+                <div class="field"><label>Title *</label><input type="text" name="title" required
+                        value="{{ project.title if project else '' }}"></div>
+                <div class="field"><label>Category *</label>
+                    <select name="category" required>
+                        {% for cat in ['Education', 'Healthcare', 'Environment',
+                        'Women Empowerment', 'Child Welfare', 'Community Development'] %}
+                        <option {{ 'selected' if project and project.category==cat }}>{{ cat }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-grid">
+                <div class="field"><label>Location *</label><input type="text" name="location" required
+                        value="{{ project.location if project else '' }}"></div>
+                <div class="field"><label>Status</label>
+                    <select name="status">
+                        {% for s in ['ACTIVE','CLOSED','PLANNED','DRAFT'] %}
+                        <option {{ 'selected' if project and project.status==s }}>{{ s }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-grid">
+                <div class="field"><label>Start date *</label><input type="date" name="start_date" required
+                        value="{{ project.start_date if project else '' }}"></div>
+                <div class="field"><label>End date</label><input type="date" name="end_date"
+                        value="{{ project.end_date if project else '' }}"></div>
+            </div>
+            <div class="field"><label>Beneficiaries</label><input type="number" name="beneficiaries" min="0"
+                    value="{{ project.beneficiaries or 0 }}"></div>
+            <div class="field"><label>Description *</label><textarea name="description" rows="5"
+                    required>{{ project.description if project else '' }}</textarea></div>
+            <div class="field"><label>Objectives</label><textarea name="objectives"
+                    rows="3">{{ project.objectives if project else '' }}</textarea></div>
+            <div class="field"><label>Activities</label><textarea name="activities"
+                    rows="3">{{ project.activities if project else '' }}</textarea></div>
+            <div class="field"><label>Image</label><input type="file" name="image" accept="image/*"></div>
+            <div class="toolbar"><button class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> {{ 'Update' if
+                    project else 'Create' }} Project</button>
+                <a class="btn btn-ghost" href="{{ url_for('admin.projects') }}">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

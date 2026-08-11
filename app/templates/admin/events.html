@@ -1,0 +1,45 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}Events{% endblock %}
+{% block page_heading %}Events{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <div class="toolbar"><a class="btn btn-sm btn-primary" href="{{ url_for('admin.event_new') }}"><i
+                    class="fa-solid fa-plus"></i> New Event</a></div>
+        {% if events %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Date</th>
+                    <th>Location</th>
+                    <th>Capacity</th>
+                    <th>Registered</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>{% for e in events %}
+                <tr>
+                    <td>{{ e.title }}</td>
+                    <td>{{ e.event_date|datefmt }}</td>
+                    <td>{{ e.location }}</td>
+                    <td>{{ e.capacity or '∞' }}</td>
+                    <td>{{ e.registered_count }}</td>
+                    <td><span class="badge badge-{{ e.status|status_badge }}">{{ e.status }}</span></td>
+                    <td><a class="btn btn-sm btn-ghost" href="{{ url_for('admin.event_edit', eid=e.id) }}">Edit</a>
+                        <form method="post" action="{{ url_for('admin.event_delete', eid=e.id) }}"
+                            style="display:inline">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button class="btn btn-sm btn-error"
+                                onclick="return confirm('Delete this event?')">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}<p>No events yet.</p>{% endif %}
+    </div>
+</div>
+{% endblock %}

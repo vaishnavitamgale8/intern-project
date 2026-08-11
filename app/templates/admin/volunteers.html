@@ -1,0 +1,60 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}Volunteers{% endblock %}
+{% block page_heading %}Volunteer Applications{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <div class="filter-bar">
+            <a class="btn btn-sm {{ 'btn-primary' if not request.args.get('status') else 'btn-ghost' }}"
+                href="{{ url_for('admin.volunteers') }}">All</a>
+            {% for s in ['PENDING','APPROVED','REJECTED'] %}
+            <a class="btn btn-sm {{ 'btn-primary' if request.args.get('status')==s else 'btn-ghost' }}"
+                href="{{ url_for('admin.volunteers', status=s) }}">{{ s }}</a>
+            {% endfor %}
+        </div>
+        {% if volunteers %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Application ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Area</th>
+                    <th>Skills</th>
+                    <th>Submitted</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for v in volunteers %}
+                <tr>
+                    <td>{{ v.application_id }}</td>
+                    <td>{{ v.full_name }}</td>
+                    <td>{{ v.email }}</td>
+                    <td>{{ v.area_of_interest }}</td>
+                    <td>{{ v.skills[:40] }}</td>
+                    <td>{{ v.applied_at|datefmt }}</td>
+                    <td><span class="badge badge-{{ v.status|status_badge }}">{{ v.status }}</span></td>
+                    <td>
+                        {% if v.status == 'PENDING' %}
+                        <form method="post" action="{{ url_for('admin.volunteer_review', vid=v.id, action='approve') }}"
+                            style="display:inline">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button class="btn btn-sm btn-success">Approve</button>
+                        </form>
+                        <form method="post" action="{{ url_for('admin.volunteer_review', vid=v.id, action='reject') }}"
+                            style="display:inline">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button class="btn btn-sm btn-error">Reject</button>
+                        </form>
+                        {% else %}{{ v.reviewed_at|datefmt if v.reviewed_at else '—' }}{% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}<p>No volunteer applications found.</p>{% endif %}
+    </div>
+</div>
+{% endblock %}

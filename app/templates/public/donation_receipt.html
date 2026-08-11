@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Donation Receipt · ImpactBridge AI{% endblock %}
+{% block content %}
+<section class="section">
+    <div class="container" style="max-width:560px">
+        <div class="card" style="text-align:center;padding:var(--space-6)">
+            <div class="stat-icon" style="background:var(--teal-50);color:var(--teal-600);margin:0 auto var(--space-3)">
+                <i class="fa-solid fa-circle-check"></i></div>
+            <h2>Thank you for your donation!</h2>
+            <p>Your generosity makes a real difference.</p>
+            <hr>
+            <ul class="list-plain" style="text-align:left">
+                <li><strong>Transaction ID:</strong> {{ donation.transaction_id }}</li>
+                <li><strong>Campaign:</strong> {{ donation.campaign.title if donation.campaign else 'General' }}</li>
+                <li><strong>Donor:</strong> {{ donation.donor_name }}</li>
+                <li><strong>Amount:</strong> {{ donation.amount|currency }}</li>
+                <li><strong>Date:</strong> {{ donation.created_at|datefmt }}</li>
+                {% if donation.message %}<li><strong>Message:</strong> {{ donation.message }}</li>{% endif %}
+            </ul>
+            <a class="btn btn-primary" href="{{ url_for('public.home') }}">Back to Home</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

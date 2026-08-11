@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Become a Volunteer · ImpactBridge AI{% endblock %}
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <p class="kicker" style="color:var(--teal-500)">GET INVOLVED</p>
+        <h1>Become a Volunteer</h1>
+        <p>Your time and skills can transform communities.</p>
+    </div>
+</section>
+<section class="section">
+    <div class="container" style="max-width:720px">
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="form-grid">
+                        <div class="field"><label>Full name</label><input type="text" name="full_name" required
+                                placeholder="Your name"></div>
+                        <div class="field"><label>Email</label><input type="email" name="email" required
+                                placeholder="you@example.com"></div>
+                        <div class="field"><label>Phone</label><input type="tel" name="phone" required
+                                placeholder="+91 98765 43210"></div>
+                        <div class="field"><label>City</label><input type="text" name="city" required
+                                placeholder="Pune"></div>
+                    </div>
+                    <div class="field"><label>Skills</label><input type="text" name="skills" required
+                            placeholder="e.g. Teaching, Design, Fundraising"></div>
+                    <div class="form-grid">
+                        <div class="field">
+                            <label>Area of interest</label>
+                            <select name="area_of_interest" required>
+                                <option value="">Select…</option>
+                                <option>Education</option>
+                                <option>Healthcare</option>
+                                <option>Environment</option>
+                                <option>Women Empowerment</option>
+                                <option>Child Welfare</option>
+                                <option>Community Development</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label>Availability</label>
+                            <select name="availability" required>
+                                <option value="">Select…</option>
+                                <option>Weekdays</option>
+                                <option>Weekends</option>
+                                <option>Evenings</option>
+                                <option>Flexible</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field"><label>Previous experience (optional)</label><textarea name="experience" rows="3"
+                            placeholder="Tell us about your volunteering or work experience…"></textarea></div>
+                    <div class="field"><label>Why do you want to volunteer?</label><textarea name="reason" rows="3"
+                            required placeholder="Share your motivation…"></textarea></div>
+                    <button class="btn btn-lg btn-primary" style="width:100%"><i class="fa-solid fa-handshake"></i>
+                        Submit Application</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
